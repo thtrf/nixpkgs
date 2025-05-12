@@ -1,0 +1,46 @@
+diff --color -ruN a/build-aux/library.js b/build-aux/library.js
+--- a/build-aux/library.js	2025-05-12 13:02:00.602215255 +0200
++++ b/build-aux/library.js	2025-05-12 13:02:50.232483669 +0200
+@@ -226,12 +226,7 @@
+   }
+ }
+ 
+-const key_file = new GLib.KeyFile();
+-key_file.load_from_file("/.flatpak-info", GLib.KeyFileFlags.NONE);
+-// runtime/org.gnome.Sdk/x86_64/master
+-const [, , , runtime_version] = key_file
+-  .get_string("Application", "runtime")
+-  .split("/");
++const runtime_version = "host";
+ 
+ function isDemoCompatible(demo) {
+   const demo_runtime_version = demo["runtime-version"];
+diff --color -ruN a/src/bin.js b/src/bin.js
+--- a/src/bin.js	2025-05-12 13:29:33.286820668 +0200
++++ b/src/bin.js	2025-05-12 13:30:12.348177853 +0200
+@@ -14,13 +14,6 @@
+ });
+ setConsoleLogDomain(pkg.name);
+ 
+-if (!Xdp.Portal.running_under_flatpak()) {
+-  console.error(
+-    "Flatpak required\nWorkbench is only meant to be run sandboxed in a specific target environment.\nBypassing this will exposes users to arbitrary code execution and breakage.",
+-  );
+-  exit(1);
+-}
+-
+ globalThis.__DEV__ = pkg.name.endsWith(".Devel");
+ if (__DEV__) {
+   pkg.sourcedir = "@sourcedir@";
+diff --color -ruN a/src/Extensions/Extensions.js b/src/Extensions/Extensions.js
+--- a/src/Extensions/Extensions.js	2025-05-12 13:35:48.732676348 +0200
++++ b/src/Extensions/Extensions.js	2025-05-12 13:36:04.002430766 +0200
+@@ -81,8 +81,6 @@
+ 
+ const llvm = "llvm18";
+ const node = "node20";
+-const runtime = getFlatpakInfo().get_string("Application", "runtime");
+-const freedesktop_version = runtime.endsWith("master") ? "24.08" : "24.08";
+ 
+ export function isTypeScriptEnabled() {
+   return settings.get_boolean("typescript");

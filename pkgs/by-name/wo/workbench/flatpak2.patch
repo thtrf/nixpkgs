@@ -1,0 +1,16 @@
+--- a/src/bin.js	2025-05-12 13:29:33.286820668 +0200
++++ b/src/bin.js	2025-05-12 13:30:12.348177853 +0200
+@@ -14,13 +14,6 @@
+ });
+ setConsoleLogDomain(pkg.name);
+ 
+-if (!Xdp.Portal.running_under_flatpak()) {
+-  console.error(
+-    "Flatpak required\nWorkbench is only meant to be run sandboxed in a specific target environment.\nBypassing this will exposes users to arbitrary code execution and breakage.",
+-  );
+-  exit(1);
+-}
+-
+ globalThis.__DEV__ = pkg.name.endsWith(".Devel");
+ if (__DEV__) {
+   pkg.sourcedir = "@sourcedir@";
